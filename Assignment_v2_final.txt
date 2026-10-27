@@ -1,0 +1,8 @@
+Course: CS 450 Computer Networks
+Assignment 1: Distributed Systems Protocol Analysis (FINAL)
+Author: Student Demo
+Status: Complete & Corrected Final Version
+
+Abstract:
+This final submission presents complete, verified latency benchmarks, mathematical proof of convergence,
+and benchmark graphs. All reviewer comments resolved.

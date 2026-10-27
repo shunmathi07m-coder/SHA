@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Which One Did I Send? — File History & Audit Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <!-- Navigation / Header -->
+    <header class="dashboard-header">
+      <div class="header-brand">
+        <div class="brand-logo">🛡️</div>
+        <div>
+          <h1 class="brand-title">Which One Did I Send?</h1>
+          <p class="brand-subtitle">"Git tracks source changes. Which One Did I Send? tracks what you send."</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <input type="file" id="bulkImportInput" multiple style="display: none;">
+        <button class="btn btn-primary" id="btnImportFiles">
+          <span class="icon">📁</span> Import / Index Real Files
+        </button>
+        <button class="btn btn-outline" id="btnOpenLinkModal">
+          <span class="icon">🔗</span> Link Versions
+        </button>
+        <button class="btn btn-outline" id="btnVerifyChain">
+          <span class="icon">🔍</span> Verify Chain
+        </button>
+        <button class="btn btn-outline" id="btnExportJson">
+          <span class="icon">📥</span> Export JSON
+        </button>
+        <button class="btn btn-danger-outline" id="btnClearHistory">
+          <span class="icon">🗑️</span> Clear History
+        </button>
+      </div>
+    </header>
+
+    <!-- Integrity Banner -->
+    <section class="integrity-banner banner-success" id="integrityBanner">
+      <div class="banner-icon" id="bannerIcon">🛡️</div>
+      <div class="banner-content">
+        <h3 class="banner-title" id="bannerTitle">Cryptographic Chain Verified</h3>
+        <p class="banner-desc" id="bannerDesc">All stored records are sealed with SHA-256 hash chaining. No tampering detected.</p>
+      </div>
+      <button class="btn btn-sm btn-subtle" id="btnReaudit">Re-audit</button>
+    </section>
+
+    <!-- Metrics Cards -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon bg-blue">📁</div>
+        <div class="metric-data">
+          <span class="metric-value" id="metricTotal">0</span>
+          <span class="metric-label">Total Real Files Tracked</span>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon bg-amber">⚡</div>
+        <div class="metric-data">
+          <span class="metric-value" id="metricDuplicates">0</span>
+          <span class="metric-label">Exact Duplicates Caught</span>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon bg-purple">🔗</div>
+        <div class="metric-data">
+          <span class="metric-value" id="metricVersions">0</span>
+          <span class="metric-label">Version Relationships</span>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon bg-rose">🛡️</div>
+        <div class="metric-data">
+          <span class="metric-value" id="metricLeaks">0</span>
+          <span class="metric-label">Privacy Leaks Shielded</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search & Filter Controls -->
+    <section class="filter-card">
+      <div class="filter-inputs">
+        <div class="search-box">
+          <span class="search-icon">🔎</span>
+          <input type="text" id="searchInput" placeholder="Search by filename, recipient, or full/partial SHA-256 fingerprint...">
+        </div>
+        <div class="filter-select-group">
+          <select id="filterStage" class="select-dropdown">
+            <option value="ALL">All Event Stages</option>
+            <option value="IMPORTED">Imported / Indexed</option>
+            <option value="SCANNED">Preflight Scanned</option>
+            <option value="UPLOAD_SELECTED">Selected for Upload</option>
+            <option value="UPLOAD_CANCELLED">Upload Cancelled (Blocked)</option>
+            <option value="UPLOAD_CONTINUED">Upload Continued (Override)</option>
+            <option value="UPLOAD_INITIATED">Upload Initiated</option>
+            <option value="UPLOAD_CONFIRMED">Delivery Confirmed</option>
+          </select>
+          <select id="filterPrivacy" class="select-dropdown">
+            <option value="ALL">All Privacy Statuses</option>
+            <option value="CLEAN">Clean (Scanned)</option>
+            <option value="SENSITIVE_DETECTED">Sensitive Data Detected</option>
+            <option value="UNSUPPORTED_FORMAT">Unsupported Format</option>
+            <option value="NOT_SCANNED">Not Scanned</option>
+          </select>
+          <select id="filterVersion" class="select-dropdown">
+            <option value="ALL">All Version Statuses</option>
+            <option value="EXPLICIT_LINK">Explicitly Linked</option>
+            <option value="POTENTIAL_OUTDATED">Outdated Version Warned</option>
+            <option value="EXACT_DUPLICATE">Duplicate Fingerprint</option>
+            <option value="CLEAN">No Conflicts</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- History Table -->
+    <main class="table-container">
+      <table class="history-table" id="historyTable">
+        <thead>
+          <tr>
+            <th>Date & Time</th>
+            <th>Document Name & Size</th>
+            <th>SHA-256 Fingerprint</th>
+            <th>Event Stage</th>
+            <th>Version Link / Status</th>
+            <th>Privacy Shield</th>
+            <th>Website / Origin</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Rows injected dynamically -->
+        </tbody>
+      </table>
+      <div class="table-empty hidden" id="tableEmpty">
+        <span class="empty-icon">📭</span>
+        <h3>No activity records match your filter</h3>
+        <p>Import real files using "Import / Index Real Files" above or scan a file in the extension popup.</p>
+      </div>
+    </main>
+
+    <!-- Record Details Modal -->
+    <div class="modal-overlay hidden" id="detailsModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title" id="modalTitle">Record Inspection</h2>
+          <button class="modal-close" id="btnCloseModal">✕</button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <!-- Content injected dynamically -->
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="btnCloseModalBtn">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Explicit Version Linking Modal -->
+    <div class="modal-overlay hidden" id="linkVersionModal">
+      <div class="modal-card modal-sm">
+        <div class="modal-header">
+          <h2 class="modal-title">🔗 Link File Version Relationship</h2>
+          <button class="modal-close" id="btnCloseLinkModal">✕</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size: 13px; color: var(--text-secondary);">
+            Explicitly register that one recorded file supersedes another as its newer version. FileGuard will warn you whenever the older version is selected.
+          </p>
+          <div class="form-group mt-2">
+            <label class="prop-label" for="selectOlderRecord">Older / Superseded File:</label>
+            <select id="selectOlderRecord" class="select-dropdown" style="width: 100%;">
+              <option value="">Select older document...</option>
+            </select>
+          </div>
+          <div class="form-group mt-2">
+            <label class="prop-label" for="selectNewerRecord">Newer / Replacement File:</label>
+            <select id="selectNewerRecord" class="select-dropdown" style="width: 100%;">
+              <option value="">Select newer document...</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="btnCancelLinkModal">Cancel</button>
+          <button class="btn btn-primary" id="btnConfirmLinkVersion">Confirm Version Link</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirm Clear Modal -->
+    <div class="modal-overlay hidden" id="confirmClearModal">
+      <div class="modal-card modal-sm">
+        <div class="modal-header">
+          <h2 class="modal-title text-danger">Confirm Clear History</h2>
+          <button class="modal-close" id="btnCancelClear">✕</button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete all local history records and reset the tamper-evident hash chain?</p>
+          <p class="text-muted mt-2">This action cannot be undone. All file fingerprints, version relationships, and recorded sharing logs will be permanently erased.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="btnCancelClearBtn">Cancel</button>
+          <button class="btn btn-danger" id="btnConfirmClearBtn">Permanently Clear History</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Shared & Dashboard Scripts -->
+  <script src="../shared/crypto.js"></script>
+  <script src="../shared/privacy-shield.js"></script>
+  <script src="../shared/fileguard.js"></script>
+  <script src="../shared/storage.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

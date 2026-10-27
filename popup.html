@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Which One Did I Send?</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="brand">
+        <div class="logo-badge">🛡️</div>
+        <div>
+          <h1 class="brand-title">Which One Did I Send?</h1>
+          <p class="brand-tagline">Know what you sent. Catch mistakes before you send.</p>
+        </div>
+      </div>
+      <div class="status-indicator active" id="globalStatus" title="FileGuard Active">
+        <span class="pulse-dot"></span> Active
+      </div>
+    </header>
+
+    <!-- Protection Toggles -->
+    <section class="toggles-card">
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span class="toggle-name">FileGuard Protection</span>
+          <span class="toggle-desc">Warns if a newer file version exists</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggleFileGuard" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span class="toggle-name">Privacy Leak Shield</span>
+          <span class="toggle-desc">Scans for exposed keys, emails, phones</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="togglePrivacyShield" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Summary Stats Bar -->
+    <section class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-value" id="statTotalFiles">0</span>
+        <span class="stat-label">Files Tracked</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value" id="statDuplicates">0</span>
+        <span class="stat-label">Duplicates</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value" id="statOutdated">0</span>
+        <span class="stat-label">Outdated Warned</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value" id="statLeaks">0</span>
+        <span class="stat-label">Leaks Caught</span>
+      </div>
+    </section>
+
+    <!-- Quick Preflight File Scanner -->
+    <section class="scanner-section">
+      <div class="section-title-row">
+        <h2>Manual Preflight Scanner</h2>
+        <span class="badge badge-info">Local Only</span>
+      </div>
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" class="file-input-hidden">
+        <div class="drop-content">
+          <span class="drop-icon">📄</span>
+          <p class="drop-prompt"><strong>Click to select</strong> or drag file here</p>
+          <p class="drop-subtext">Pre-check SHA-256, version & privacy before sharing</p>
+        </div>
+      </div>
+
+      <!-- Scan Result Card (Hidden initially) -->
+      <div class="scan-result-card hidden" id="scanResultCard">
+        <div class="result-header">
+          <span class="result-filename" id="resultFilename">filename.txt</span>
+          <span class="result-badge" id="resultBadge">CLEAN</span>
+        </div>
+        <div class="result-details">
+          <div class="detail-row">
+            <span class="detail-label">SHA-256:</span>
+            <span class="detail-val mono" id="resultSha256">...</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">FileGuard:</span>
+            <span class="detail-val" id="resultFileGuard">Checking...</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Privacy Shield:</span>
+            <span class="detail-val" id="resultPrivacyShield">Checking...</span>
+          </div>
+        </div>
+        <!-- Findings Preview if any -->
+        <div class="findings-box hidden" id="findingsBox"></div>
+        <div class="action-buttons">
+          <button class="btn btn-sm btn-primary" id="btnLogPreflight">Record in History</button>
+          <button class="btn btn-sm btn-secondary" id="btnResetScan">Clear</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Activity -->
+    <section class="recent-section">
+      <div class="section-title-row">
+        <h2>Recent Activity</h2>
+        <button class="btn-link" id="btnOpenDashboardLink">View All</button>
+      </div>
+      <div class="activity-list" id="activityList">
+        <div class="empty-state">No files tracked yet. Try the preflight scanner above!</div>
+      </div>
+    </section>
+
+    <!-- Footer Action Buttons -->
+    <footer class="popup-footer">
+      <button class="btn btn-primary btn-full" id="btnOpenDashboard">
+        📊 Open History Dashboard
+      </button>
+      <button class="btn btn-secondary btn-full" id="btnOpenDemo">
+        🚀 Launch Localhost Demo Page
+      </button>
+    </footer>
+  </div>
+
+  <!-- Shared & Extension scripts -->
+  <script src="../shared/crypto.js"></script>
+  <script src="../shared/privacy-shield.js"></script>
+  <script src="../shared/fileguard.js"></script>
+  <script src="../shared/storage.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

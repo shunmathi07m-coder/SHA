@@ -1,0 +1,8 @@
+Course: CS 450 Computer Networks
+Assignment 1: Distributed Systems Protocol Analysis (Draft)
+Author: Student Demo
+Status: Early Draft — Incomplete Analysis
+
+Abstract:
+This draft presents the baseline latency benchmarks for peer-to-peer gossip dissemination.
+Equations are pending peer review.

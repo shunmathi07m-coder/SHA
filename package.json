@@ -1,0 +1,20 @@
+{
+  "name": "which-one-did-i-send",
+  "version": "1.0.0",
+  "description": "Chrome Extension MVP — FileGuard (Wrong-Version Prevention) + Privacy Leak Shield with Tamper-Evident Hash Chaining",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/test_manifest.js && node test/test_runner.js"
+  },
+  "keywords": [
+    "chrome-extension",
+    "fileguard",
+    "privacy-shield",
+    "sha-256",
+    "manifest-v3",
+    "tamper-evident"
+  ],
+  "author": "Antigravity",
+  "license": "MIT"
+}

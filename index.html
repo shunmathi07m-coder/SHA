@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Which One Did I Send? — Real-File Demonstration</title>
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+  <div class="demo-wrapper">
+    <!-- Header -->
+    <header class="demo-header">
+      <div class="header-inner">
+        <div class="brand-group">
+          <div class="brand-shield">🛡️</div>
+          <div>
+            <h1 class="brand-title">Which One Did I Send?</h1>
+            <p class="brand-tagline">"Git tracks source changes. Which One Did I Send? tracks what you send."</p>
+          </div>
+        </div>
+        <div class="header-buttons">
+          <input type="file" id="demoBulkImportInput" multiple style="display: none;">
+          <button class="btn btn-primary" id="btnDemoBulkImport">
+            <span class="icon">📁</span> Import / Index Real Files
+          </button>
+          <button class="btn btn-outline" id="btnDemoLinkVersions">
+            <span class="icon">🔗</span> Link Versions
+          </button>
+          <a href="../dashboard/dashboard.html" class="btn btn-outline" target="_blank">
+            📊 Open Shared Dashboard
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Simulated Environment Notice -->
+    <div class="notice-banner">
+      <span class="notice-icon">ℹ️</span>
+      <div class="notice-text">
+        <strong>Real-File Operational Environment:</strong>
+        All four scenarios operate on actual user-selected files, real Web Crypto SHA-256 fingerprints, and one unified persistent history database.
+        Files are processed 100% locally in your browser memory — no files or keys are transmitted to any remote server.
+      </div>
+    </div>
+
+    <!-- 4 Real-File Demonstration Scenarios -->
+    <section class="scenarios-panel">
+      <div class="section-heading">
+        <h2>⚡ The Four Core Scenarios (Operating on Real Files)</h2>
+        <p>Test each scenario using actual files from your local drive or the verified sample files on disk:</p>
+      </div>
+      <div class="scenarios-grid">
+        <div class="scenario-card" id="cardScenarioSafe">
+          <div class="scenario-header">
+            <span class="scenario-badge badge-clean">Scenario 1</span>
+            <h3>Normal File Processing</h3>
+          </div>
+          <p class="scenario-desc">Computes real SHA-256 fingerprint, extracts actual metadata, and logs into shared persistent history.</p>
+          <div class="scenario-buttons">
+            <button class="btn btn-sm btn-primary" id="btnRunSafe">Load Real Safe Sample</button>
+          </div>
+        </div>
+
+        <div class="scenario-card" id="cardScenarioOutdated">
+          <div class="scenario-header">
+            <span class="scenario-badge badge-warn">Scenario 2</span>
+            <h3>FileGuard Version Detection</h3>
+          </div>
+          <p class="scenario-desc">Queries real history for newer versions. Detects explicitly confirmed links or heuristic candidate upgrades.</p>
+          <div class="scenario-buttons">
+            <button class="btn btn-sm btn-warn" id="btnRunOutdated">Test Real Version Check</button>
+          </div>
+        </div>
+
+        <div class="scenario-card" id="cardScenarioSensitive">
+          <div class="scenario-header">
+            <span class="scenario-badge badge-danger">Scenario 3</span>
+            <h3>Privacy Leak Shield</h3>
+          </div>
+          <p class="scenario-desc">Scans real file contents for exposed API keys, tokens, emails, and phone numbers with safe masking.</p>
+          <div class="scenario-buttons">
+            <button class="btn btn-sm btn-danger" id="btnRunSensitive">Load Real Sensitive Sample</button>
+          </div>
+        </div>
+
+        <div class="scenario-card" id="cardScenarioDuplicate">
+          <div class="scenario-header">
+            <span class="scenario-badge badge-info">Scenario 4</span>
+            <h3>Shared History & Duplicates</h3>
+          </div>
+          <p class="scenario-desc">Demonstrates exact duplicate detection via matching SHA-256 fingerprints across shared persistent records.</p>
+          <div class="scenario-buttons">
+            <button class="btn btn-sm btn-secondary" id="btnRunDuplicate">Test Duplicate Fingerprint</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Real-File Selection & Sharing Area -->
+    <main class="main-work-area">
+      <div class="work-column upload-col">
+        <div class="card-box">
+          <div class="box-header">
+            <h3>Select Any Real Document to Process</h3>
+            <span class="badge badge-info">Local File API</span>
+          </div>
+
+          <form id="simulatedForm" class="upload-form">
+            <div class="form-group">
+              <label for="recipientInput">Recipient / Destination (Recorded only if specified):</label>
+              <input type="text" id="recipientInput" class="form-input" placeholder="e.g., recipient@university.edu or HR Portal">
+            </div>
+
+            <div class="form-group">
+              <label>Select Document From Your Computer:</label>
+              <div class="drop-area" id="demoDropZone">
+                <input type="file" id="demoFileInput" class="hidden-file-input">
+                <div class="drop-label">
+                  <span class="drop-icon">📁</span>
+                  <p><strong>Click to choose a real file</strong> or drag & drop</p>
+                  <span class="drop-hint" id="dropHint">Supports .txt, .csv, .json, .md, .pdf, .docx, and all local files</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="file-status-preview hidden" id="fileStatusPreview">
+              <div class="preview-row">
+                <span class="preview-filename" id="previewFilename">file.txt</span>
+                <span class="preview-size" id="previewSize">0 KB</span>
+              </div>
+              <div class="preview-row" style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                <span>Last Modified:</span>
+                <span id="previewLastModified">—</span>
+              </div>
+              <div class="preview-hash" id="previewHash">SHA-256: calculating...</div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary btn-lg" id="btnSimulateShare">
+                📤 Simulate Share / Process File
+              </button>
+              <button type="button" class="btn btn-secondary" id="btnResetForm">
+                Reset
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Real-Time Inspection & Verdict Panel -->
+      <div class="work-column inspection-col">
+        <div class="card-box">
+          <div class="box-header">
+            <h3>Live Analysis & Verdict</h3>
+            <span class="badge" id="verdictBadge">Ready</span>
+          </div>
+
+          <div class="verdict-body">
+            <div class="verdict-summary" id="verdictSummary">
+              Choose a real file from your computer or click one of the real sample scenarios above to run live analysis.
+            </div>
+
+            <!-- Findings Card (Dynamic) -->
+            <div class="findings-container hidden" id="demoFindingsContainer">
+              <h4>Privacy Leak Shield Detections (Safely Masked):</h4>
+              <div class="findings-list" id="demoFindingsList"></div>
+            </div>
+
+            <!-- Version Comparison Card (Dynamic) -->
+            <div class="version-comparison-container hidden" id="demoVersionContainer">
+              <h4>FileGuard Version Analysis:</h4>
+              <div class="comparison-details" id="demoComparisonDetails"></div>
+            </div>
+
+            <!-- Workflow Outcome Log -->
+            <div class="outcome-box hidden" id="demoOutcomeBox">
+              <h4>Truthful Lifecycle Action Status:</h4>
+              <p id="demoOutcomeText">—</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Persistent Shared History Section -->
+    <section class="history-preview-section">
+      <div class="section-heading-row">
+        <div style="display: flex; align-items: baseline; gap: 12px;">
+          <h3>Shared Persistent File History</h3>
+          <span style="font-size: 12px; color: var(--text-muted);" id="historyCounter">(0 records)</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="demoSearchInput" placeholder="Filter by name or SHA-256..." class="form-input" style="padding: 4px 10px; font-size: 12px; width: 220px;">
+          <button class="btn btn-sm btn-subtle" id="btnRefreshDemoTable">Refresh</button>
+          <button class="btn btn-sm btn-danger-outline" id="btnDemoClearHistory">Clear History</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="demo-table">
+          <thead>
+            <tr>
+              <th>Date / Time</th>
+              <th>Real Document</th>
+              <th>SHA-256 Fingerprint</th>
+              <th>Lifecycle Stage</th>
+              <th>Version Status</th>
+              <th>Privacy Scan</th>
+              <th>Recipient</th>
+            </tr>
+          </thead>
+          <tbody id="demoTableBody">
+            <tr>
+              <td colspan="7" class="text-center text-muted">No records stored yet in persistent history.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Version Linking Modal on Demo Page -->
+    <div class="modal-overlay hidden" id="demoLinkModal">
+      <div class="modal-card modal-sm">
+        <div class="modal-header">
+          <h2 class="modal-title">🔗 Link File Version Relationship</h2>
+          <button class="modal-close" id="btnCloseDemoLink">✕</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size: 13px; color: var(--text-muted);">
+            Explicitly register that an actual recorded file supersedes another as its newer version.
+          </p>
+          <div class="form-group mt-2">
+            <label class="prop-label" for="demoSelectOlder">Older / Superseded File:</label>
+            <select id="demoSelectOlder" class="select-dropdown" style="width: 100%;">
+              <option value="">Select older document...</option>
+            </select>
+          </div>
+          <div class="form-group mt-2">
+            <label class="prop-label" for="demoSelectNewer">Newer / Replacement File:</label>
+            <select id="demoSelectNewer" class="select-dropdown" style="width: 100%;">
+              <option value="">Select newer document...</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="btnCancelDemoLink">Cancel</button>
+          <button class="btn btn-primary" id="btnConfirmDemoLink">Confirm Version Link</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="demo-footer">
+      <p>Which One Did I Send? — Real-File Chrome Extension MVP. 100% Local Processing & Persistent History.</p>
+    </footer>
+  </div>
+
+  <!-- Shared libraries -->
+  <script src="../shared/crypto.js"></script>
+  <script src="../shared/privacy-shield.js"></script>
+  <script src="../shared/fileguard.js"></script>
+  <script src="../shared/storage.js"></script>
+  <script src="demo.js"></script>
+</body>
+</html>
